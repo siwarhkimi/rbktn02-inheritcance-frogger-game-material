@@ -1,19 +1,61 @@
 // Enemies our player must avoid
-var Enemy = function() {
+/*
+   Inside the app.js file, you will need to implement the Player and the Enemy classes, using Object-Oriented JavaScript. Part of the code for the Enemy is provided to you, and you will need to complete the following:
+   *	The Enemy function, which initiates the Enemy by:
+   *	Loading the image by setting this.sprite to the appropriate image in the image folder (already provided)
+   *	The update method for the Enemy
+   *	Updates the Enemy location (you need to implement)
+   *	EXTRA: RANDOMIZES ENEMY RE-START SPEED
+   *	              //TODO: MAKE ENEMIES DO NOT COINCEDE IN ROW 
+   *	Handles collision with the Player (you need to implement)	
+   *	You can add your own Enemy methods as needed
+ */
+
+var Enemy = function(sens) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-
+    this.x = sens && 400
+    this.y = 400 * Math.random()
+    this.speed = sens*Math.random() * 150 || Math.random() * 150 
+    
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.sprite = 'images/enemy-bug.png';
+    this.sprite = 'images/enemy-bug.png' ;
 };
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    
+    //     this.step = this.x - this.old;
+    //     console.log('this is the step: ', this.step)
+    
+    //  if(Math.ceil(this.x) >= 400 && this.step > 0) { 
+    //     this.old = this.x
+    //     console.log('this is the old: ', this.old) 
+    //     this.x -= this.speed * dt;
+    //      console.log('this is the new: ', this.x)
+    // }
+    //  if(Math.ceil(this.x) <= 0 && this.step < 0) {
+
+    //     this.old = this.x
+        
+    //     this.x += this.speed * dt;
+       
+    //  }
+
+    //this will reset the bugs from the beggining each time they hit the wall but they don't turn back 
+    // I'll be back  
+    this.x = this.speed * dt;
+    if(Math.ceil(this.x) >= 400) { 
+      this.x=0;
+    }
+    if(Math.ceil(this.x) < 0) { 
+        this.x=400;
+    }
+
+     
+    
 };
 
 // Draw the enemy on the screen, required method for game
@@ -21,17 +63,48 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+
+
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+var Player = function() {
+    // Variables applied to each of our instances go here,
+    // we've provided one for you to get started
+    this.x = 200 ;
+    this.y = 430 
+    // The image/sprite for our enemies, this uses
+    // a helper we've provided to easily load images
+    this.sprite = 'images/char-boy.png' ;
+};
+Player.prototype.update = function() {
+    // this.y -= 3 
+};
 
+// Draw the enemy on the screen, required method for game
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+Player.prototype.handleInput = function(direction) {
+    if(direction === 'left'  && this.x > 0) {
+        this.x -= 50;
+    } else if(direction === 'right'&& this.x < 400) {
+        this.x += 50;
+    }
+    else if(direction === 'up' && this.y >0) {
+        this.y -= 50;
+    }
+    else if(direction === 'down' && this.y < 430) {
+        this.y += 50;
+    }
+}
+//0<y<430
+//0<x<400
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
-
-
+var allEnemies = [new Enemy (), new Enemy (-1)]
+var player = new Player()
+var allPlayer = [player]
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
