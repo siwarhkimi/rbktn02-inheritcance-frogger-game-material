@@ -26,36 +26,21 @@ var Enemy = function(sens) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    
-    //     this.step = this.x - this.old;
-    //     console.log('this is the step: ', this.step)
-    
-    //  if(Math.ceil(this.x) >= 400 && this.step > 0) { 
-    //     this.old = this.x
-    //     console.log('this is the old: ', this.old) 
-    //     this.x -= this.speed * dt;
-    //      console.log('this is the new: ', this.x)
-    // }
-    //  if(Math.ceil(this.x) <= 0 && this.step < 0) {
-
-    //     this.old = this.x
-        
-    //     this.x += this.speed * dt;
-       
-    //  }
-
-    //this will reset the bugs from the beggining each time they hit the wall but they don't turn back 
-    // I'll be back  
-    this.x = this.speed * dt;
+      
+    this.x += this.speed * dt;
     if(Math.ceil(this.x) >= 400) { 
       this.x=0;
     }
     if(Math.ceil(this.x) < 0) { 
         this.x=400;
     }
-
-     
+    if(Math.abs(player.x - this.x) < 40 && Math.abs(player.y - this.y) < 40) {
+        
+        player.x = 200;
+        player.y = 430;
+    }
     
+  
 };
 
 // Draw the enemy on the screen, required method for game
@@ -93,7 +78,16 @@ Player.prototype.handleInput = function(direction) {
         this.x += 50;
     }
     else if(direction === 'up' && this.y >0) {
+        var that = this;
         this.y -= 50;
+        if(this.y === -20){
+            setTimeout(function(){
+
+                that.x = 200;
+                that.y = 430;
+            },800)
+            
+        }
     }
     else if(direction === 'down' && this.y < 430) {
         this.y += 50;
@@ -102,7 +96,7 @@ Player.prototype.handleInput = function(direction) {
 //0<y<430
 //0<x<400
 
-var allEnemies = [new Enemy (), new Enemy (-1)]
+var allEnemies = [new Enemy (1), new Enemy (-1)]
 var player = new Player()
 var allPlayer = [player]
 // This listens for key presses and sends the keys to your
