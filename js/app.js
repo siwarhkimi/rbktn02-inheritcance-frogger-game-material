@@ -11,12 +11,20 @@
    *	You can add your own Enemy methods as needed
  */
 
-var Enemy = function(sens) {
+var Enemy = function(sens, y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
-    this.x = sens && 400
-    this.y = 400 * Math.random()
-    this.speed = sens*Math.random() * 150 || Math.random() * 150 
+    
+    if(y > 430){
+        this.y = y - 430
+    }
+     else{
+         this.y = y
+     }
+    
+    this.x = sens+1 && 400
+    
+    this.speed = sens*Math.random() * 150
     
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
@@ -28,7 +36,7 @@ var Enemy = function(sens) {
 Enemy.prototype.update = function(dt) {
       
     this.x += this.speed * dt;
-    if(Math.ceil(this.x) >= 400) { 
+    if(Math.ceil(this.x) > 400) { 
       this.x=0;
     }
     if(Math.ceil(this.x) < 0) { 
@@ -82,10 +90,9 @@ Player.prototype.handleInput = function(direction) {
         this.y -= 50;
         if(this.y === -20){
             setTimeout(function(){
-
                 that.x = 200;
                 that.y = 430;
-            },800)
+            },300)
             
         }
     }
@@ -96,7 +103,7 @@ Player.prototype.handleInput = function(direction) {
 //0<y<430
 //0<x<400
 
-var allEnemies = [new Enemy (1), new Enemy (-1)]
+var allEnemies = [new Enemy (1,20), new Enemy (-1,120), new Enemy(1,220), new Enemy(-1, 320)]
 var player = new Player()
 var allPlayer = [player]
 // This listens for key presses and sends the keys to your
